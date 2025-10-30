@@ -3,12 +3,20 @@ Windows Subsystem for Linux - Run optimal set of containers via Ubuntu via docke
 
 All upcoming examples will use official Docker (from Ubuntu 24). The containers will run in non-root environment.
 
+## install docker daemon
+
+Use
+
+```
+sudo apt -y install docker-compose
+```
+
 ## Enable official docker monitoring via Zabbix Agent 2 
 
 To enable official docker template with Zabbix agent 2 via Ubuntu 24, need to add service user 'zabbix' to be a part of docker group. this will allow zabbix_agent2 to read /run/docker.sock file.
 
 ```
-usermod -a -G docker zabbix
+sudo usermod -a -G docker zabbix
 ```
 
 ## Create PostgreSQL server via docker
@@ -32,7 +40,29 @@ docker run --name pg16ts2161 -t \
 -d timescale/timescaledb:2.16.1-pg16
 ```
 
-Run PostgreSQL 17 container
+## Create DB user
+
+To create DB user 'zabbix' with password 'zabbix', authenticate into a running container
+
+```
+docker exec -it  pg16ts2161 su - postgres
+```
+
+Create user. The prompt will ask for input. Write 'zabbix' to be password
+
+```
+createuser --pwprompt zabbix
+```
+
+Exit container
+
+```
+exit
+```
+
+## Appendix
+
+### PostgreSQL 17 container
 
 ```
 mkdir -p ${HOME}/postgresql/17
