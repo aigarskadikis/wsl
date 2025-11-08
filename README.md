@@ -3,7 +3,19 @@ Windows Subsystem for Linux - Run optimal set of containers via Ubuntu via docke
 
 All upcoming examples will use official Docker (from Ubuntu 24). The containers will run in non-root environment.
 
-## install docker daemon
+## Allow user 'user' to use sudo without password
+
+```
+echo "user ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/011_user-nopasswd
+```
+
+## Allow user 'user' to use docker at full
+
+```
+sudo usermod -a -G docker user
+```
+
+## Install docker daemon
 
 Use
 
@@ -17,6 +29,12 @@ To enable official docker template with Zabbix agent 2 via Ubuntu 24, need to ad
 
 ```
 sudo usermod -a -G docker zabbix
+```
+
+## Create a docker internal network
+
+```
+docker network create --subnet=10.88.0.0/16 DockerInternalNet
 ```
 
 ## Create PostgreSQL server via docker
@@ -33,6 +51,7 @@ Run PostgreSQL 16 container
 docker run --name pg16ts2161 -t \
 -e PGDATA=/var/lib/postgresql/data/pgdata \
 --restart unless-stopped \
+--net DockerInternalNet --ip 10.88.74.16 \
 -v ${HOME}/postgresql/16:/var/lib/postgresql/data \
 -e POSTGRES_PASSWORD="zabbix" \
 -e POSTGRES_DB="dummy_db" \
@@ -70,6 +89,7 @@ mkdir -p ${HOME}/postgresql/17
 docker run --name pg17ts2181 -t \
 -e PGDATA=/var/lib/postgresql/data/pgdata \
 -v ${HOME}/postgresql/17:/var/lib/postgresql/data \
+--net DockerInternalNet --ip 10.88.74.17 \
 -e POSTGRES_PASSWORD="zabbix" \
 -e POSTGRES_DB="dummy_db" \
 -p 7417:5432 \
