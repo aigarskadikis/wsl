@@ -46,6 +46,28 @@ services:
     restart: unless-stopped
 
 
+  z70web:
+    image: zabbix/zabbix-web-nginx-pgsql:7.0.21-alpine
+    container_name: z70web
+    environment:
+      DB_SERVER_HOST: '10.88.74.16'
+      DB_SERVER_PORT: '5432'
+      POSTGRES_DB: 'z70'
+      POSTGRES_USER: 'zabbix'
+      POSTGRES_PASSWORD: 'zabbix'
+      ZBX_SERVER_HOST: '10.88.2.70'
+      ZBX_SERVER_PORT: '10051'
+      PHP_TZ: 'Europe/Riga'
+
+    ports:
+      - "8070:8080"
+    networks:
+      podnet:
+        ipv4_address: 10.88.80.70
+    tty: true
+    restart: unless-stopped
+
+
 networks:
   podnet:
     name: DockerInternalNet
