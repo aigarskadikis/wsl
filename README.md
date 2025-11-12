@@ -117,6 +117,7 @@ docker stop z70pg ; docker rm z70pg ; docker run --name z70pg \
 ```
 docker pull zabbix/zabbix-web-nginx-pgsql:ol-7.0.21 && \
 docker stop z70web ; docker rm z70web ; docker run --name z70web \
+--net DockerInternalNet --ip 10.88.3.70 \
 --restart unless-stopped \
 -e DB_SERVER_HOST="10.88.74.16" \
 -e DB_SERVER_PORT="5432" \
