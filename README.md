@@ -94,6 +94,24 @@ cat schema.sql images.sql data.sql | psql --user=zabbix z70
 exit
 ```
 
+## Zabbix 7.0 backend
+
+```
+docker pull zabbix/zabbix-server-pgsql:ol-7.0.21 && \
+docker stop z70pg ; docker rm z70pg ; docker run --name z70pg \
+--net DockerInternalNet --ip 10.88.2.70 \
+-e TZ="Europe/Riga" \
+-e DB_SERVER_HOST="10.88.74.16" \
+-e DB_SERVER_PORT="5432" \
+-e POSTGRES_DB="z70" \
+-e POSTGRES_USER="zabbix" \
+-e POSTGRES_PASSWORD="zabbix" \
+-e ZBX_ALLOWUNSUPPORTEDDBVERSIONS=1 \
+-p 17051:10051 \
+--restart unless-stopped \
+-d zabbix/zabbix-server-pgsql:ol-7.0.21
+```
+
 ## Appendix
 
 ### PostgreSQL 17 container
