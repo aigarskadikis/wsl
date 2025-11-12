@@ -112,6 +112,24 @@ docker stop z70pg ; docker rm z70pg ; docker run --name z70pg \
 -d zabbix/zabbix-server-pgsql:ol-7.0.21
 ```
 
+## Zabbix 7.0 frontend
+
+```
+docker pull zabbix/zabbix-web-nginx-pgsql:ol-7.0.21 && \
+docker stop z70web ; docker rm z70web ; docker run --name z70web \
+--restart unless-stopped \
+-e DB_SERVER_HOST="10.88.74.16" \
+-e DB_SERVER_PORT="5432" \
+-e POSTGRES_DB="z70" \
+-e POSTGRES_USER="zabbix" \
+-e POSTGRES_PASSWORD="zabbix" \
+-e ZBX_SERVER_HOST="10.88.2.70" \
+-e ZBX_SERVER_PORT="10051" \
+-e PHP_TZ="Europe/Riga" \
+-p 8070:8080 \
+-d zabbix/zabbix-web-nginx-pgsql:ol-7.0.21
+```
+
 ## Appendix
 
 ### PostgreSQL 17 container
