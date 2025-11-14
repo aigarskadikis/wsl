@@ -3,6 +3,18 @@ Windows Subsystem for Linux - Run optimal set of containers via Ubuntu via docke
 
 All upcoming examples will use official Docker (from Ubuntu 24). The containers will run in non-root environment.
 
+## IP Address map
+
+The table indicates patterns how to choose/remember IP for certain components
+
+| Version | GUI           | zabbix-server | passive prx  | active prx  |
+| :------ | :------------ | :------------ | :----------- | :---------- |
+| 4.0     | 10.88.1.140   | 10.88.2.140   | 10.88.3.140  | 10.88.4.140 |
+| 4.2     | 10.88.1.142   | 10.88.2.142   | 10.88.3.142  | 10.88.4.142 |
+| 4.4     | 10.88.1.144   | 10.88.2.144   | 10.88.3.144  | 10.88.4.144 |
+| 5.0     | 10.88.1.150   | 10.88.2.150   | 10.88.3.150  | 10.88.4.150 |
+
+
 ## Allow user 'user' to use sudo without password
 
 ```
