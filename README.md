@@ -44,6 +44,8 @@ The table indicates patterns how to choose/remember IP for certain components
 It's possible to substitute a version number in docker-compose file with:
 
 ```
+grep 170 docker-compose.yaml
+grep z70 docker-compose.yaml
 sed 's|170|180|;s|z70|z80|' docker-compose.yaml
 ```
 

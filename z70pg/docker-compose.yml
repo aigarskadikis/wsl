@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   z70pg:
     image: zabbix/zabbix-server-pgsql:7.0.21-alpine
@@ -32,7 +30,7 @@ services:
       ZBX_STARTPREPROCESSORS: '1'
       ZBX_STARTPROXYPOLLERS: '1'
       ZBX_STARTSNMPPOLLERS: '0'
-        #      ZBX_STARTTRAPPERS: '2'
+      ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
       ZBX_STARTPINGERS: '0'
@@ -41,7 +39,42 @@ services:
       - "17051:10051"
     networks:
       podnet:
-        ipv4_address: 10.88.2.70
+        ipv4_address: 10.88.2.170
+    tty: true
+    restart: unless-stopped
+
+  z70prx:
+    image: zabbix/zabbix-proxy-sqlite3:7.0.21-alpine
+    container_name: z70prx
+    environment:
+      ZBX_HOSTNAME: 'passive'
+      ZBX_PROXYMODE: '1'
+      TZ: Europe/Riga
+      ZBX_CACHESIZE: 256M
+      ZBX_SERVER_HOST: 10.88.2.170
+      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTBROWSERPOLLERS: '0'
+      ZBX_STARTDBSYNCERS: '1'
+      ZBX_STARTDISCOVERERS: '0'
+      ZBX_STARTODBCPOLLERS: '0'
+      ZBX_STARTIPMIPOLLERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '0'
+      ZBX_STARTHTTPAGENTPOLLERS: '0'
+      ZBX_STARTHTTPPOLLERS: '0'
+      ZBX_STARTPINGERS: '0'
+      ZBX_STARTPOLLERS: '0'
+      ZBX_STARTJAVAPOLLERS: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '0'
+      ZBX_STARTPREPROCESSORS: '1'
+      ZBX_STARTSNMPPOLLERS: '0'
+      ZBX_STARTTRAPPERS: '2'
+      ZBX_STATSALLOWEDIP: second.ext
+
+    ports:
+      - "27051:10051"
+    networks:
+      podnet:
+        ipv4_address: 10.88.3.170
     tty: true
     restart: unless-stopped
 
@@ -55,7 +88,7 @@ services:
       POSTGRES_DB: 'z70'
       POSTGRES_USER: 'zabbix'
       POSTGRES_PASSWORD: 'zabbix'
-      ZBX_SERVER_HOST: '10.88.2.70'
+      ZBX_SERVER_HOST: '10.88.2.170'
       ZBX_SERVER_PORT: '10051'
       PHP_TZ: 'Europe/Riga'
 
@@ -63,7 +96,7 @@ services:
       - "8070:8080"
     networks:
       podnet:
-        ipv4_address: 10.88.80.70
+        ipv4_address: 10.88.1.170
     tty: true
     restart: unless-stopped
 

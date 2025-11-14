@@ -1,0 +1,25 @@
+services:
+  pg17ts:
+    image: timescale/timescaledb:2.18.0-pg17
+    container_name: pg17ts
+    environment:
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+      POSTGRES_PASSWORD: 'zabbix'
+      POSTGRES_DB: 'dummy_db'
+
+    volumes:
+      - '${HOME}/postgresql/17:/var/lib/postgresql/data'
+
+    ports:
+      - '7417:5432'
+    networks:
+      podnet:
+        ipv4_address: '10.88.74.17'
+    tty: true
+    restart: unless-stopped
+
+networks:
+  podnet:
+    name: DockerInternalNet
+    external: true
+
