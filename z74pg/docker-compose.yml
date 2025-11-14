@@ -1,0 +1,108 @@
+services:
+  z74pg:
+    image: zabbix/zabbix-server-pgsql:7.4.5-alpine
+    container_name: z74pg
+    environment:
+      DB_SERVER_HOST: 10.88.74.17
+      DB_SERVER_PORT: '5432'
+      POSTGRES_DB: z74
+      POSTGRES_PASSWORD: zabbix
+      POSTGRES_USER: zabbix
+      TZ: Europe/Riga
+      ZBX_ALLOWUNSUPPORTEDDBVERSIONS: '1'
+      ZBX_CACHESIZE: 256M
+      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTALERTERS: '1'
+      ZBX_STARTBROWSERPOLLERS: '0'
+      ZBX_STARTDBSYNCERS: '1'
+      ZBX_STARTDISCOVERERS: '1'
+      ZBX_STARTODBCPOLLERS: '0'
+      ZBX_STARTIPMIPOLLERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '1'
+      ZBX_STARTHTTPAGENTPOLLERS: '0'
+      ZBX_STARTHTTPPOLLERS: '0'
+      ZBX_STARTLLDPROCESSORS: '1'
+
+      ZBX_STARTPOLLERS: '0'
+      ZBX_STARTJAVAPOLLERS: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '0'
+
+      ZBX_STARTPREPROCESSORS: '1'
+      ZBX_STARTPROXYPOLLERS: '1'
+      ZBX_STARTSNMPPOLLERS: '0'
+      ZBX_STARTTRAPPERS: '2'
+      ZBX_STATSALLOWEDIP: second.ext
+
+      ZBX_STARTPINGERS: '0'
+
+    ports:
+      - "17451:10051"
+    networks:
+      podnet:
+        ipv4_address: 10.88.2.174
+    tty: true
+    restart: unless-stopped
+
+  z74prx:
+    image: zabbix/zabbix-proxy-sqlite3:7.4.5-alpine
+    container_name: z74prx
+    environment:
+      ZBX_HOSTNAME: 'passive'
+      ZBX_PROXYMODE: '1'
+      TZ: Europe/Riga
+      ZBX_CACHESIZE: 256M
+      ZBX_SERVER_HOST: 10.88.2.174
+      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTBROWSERPOLLERS: '0'
+      ZBX_STARTDBSYNCERS: '1'
+      ZBX_STARTDISCOVERERS: '0'
+      ZBX_STARTODBCPOLLERS: '0'
+      ZBX_STARTIPMIPOLLERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '0'
+      ZBX_STARTHTTPAGENTPOLLERS: '0'
+      ZBX_STARTHTTPPOLLERS: '0'
+      ZBX_STARTPINGERS: '0'
+      ZBX_STARTPOLLERS: '0'
+      ZBX_STARTJAVAPOLLERS: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '0'
+      ZBX_STARTPREPROCESSORS: '1'
+      ZBX_STARTSNMPPOLLERS: '0'
+      ZBX_STARTTRAPPERS: '2'
+      ZBX_STATSALLOWEDIP: second.ext
+
+    ports:
+      - "27451:10051"
+    networks:
+      podnet:
+        ipv4_address: 10.88.3.174
+    tty: true
+    restart: unless-stopped
+
+
+  z74web:
+    image: zabbix/zabbix-web-nginx-pgsql:7.4.5-alpine
+    container_name: z74web
+    environment:
+      DB_SERVER_HOST: '10.88.74.17'
+      DB_SERVER_PORT: '5432'
+      POSTGRES_DB: 'z74'
+      POSTGRES_USER: 'zabbix'
+      POSTGRES_PASSWORD: 'zabbix'
+      ZBX_SERVER_HOST: '10.88.2.174'
+      ZBX_SERVER_PORT: '10051'
+      PHP_TZ: 'Europe/Riga'
+
+    ports:
+      - "8074:8080"
+    networks:
+      podnet:
+        ipv4_address: 10.88.1.174
+    tty: true
+    restart: unless-stopped
+
+
+networks:
+  podnet:
+    name: DockerInternalNet
+    external: true
+
