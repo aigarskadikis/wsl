@@ -9,18 +9,23 @@ The table indicates patterns how to choose/remember IP for certain components
 
 ### DB flavors
 
-| Database      | GUI           | Exposed port |
-| :------------ | :------------ | :----------- |
-| PostgreSQL 13 | 10.88.74.13   | 7413         |
-| PostgreSQL 14 | 10.88.74.14   | 7414         |
-| PostgreSQL 15 | 10.88.74.15   | 7415         |
-| PostgreSQL 16 | 10.88.74.16   | 7416         |
-| PostgreSQL 17 | 10.88.74.17   | 7417         |
-| MySQL 8.0     | 10.88.8.0     | 3306         |
-| MySQL 9.0     | 10.88.9.0     |              |
-| MariaDB 10.3  | 10.88.10.3    |              |
-| MariaDB 11.4  | 10.88.11.4    |              |
+| Database      | GUI           | Exposed port | Container                           |
+| :------------ | :------------ | :----------- | :---------------------------------- |
+| PostgreSQL 13 | 10.88.74.13   | 7413         | timescale/timescaledb:2.15.3-pg13   |
+| PostgreSQL 16 | 10.88.74.16   | 7416         | timescale/timescaledb:2.16.1-pg16   |
+| PostgreSQL 17 | 10.88.74.17   | 7417         | timescale/timescaledb:2.18.0-pg17   |
+| MySQL 8.0     | 10.88.8.0     | 3306         |                                     |
+| MariaDB 10.3  | 10.88.10.3    |              |                                     |
+| MariaDB 11.4  | 10.88.11.4    |              |                                     |
 
+### Extra services
+
+| Service       | GUI           | Exposed port | Container                           |
+| :------------ | :------------ | :----------- | :---------------------------------- |
+| LDAP dir      | 10.88.53.27   | 6636         | bgmot42/openldap-server:0.1.1       |
+| PHP admin     | 10.88.53.28   | 4433         | osixia/phpldapadmin:0.9.0           |
+| Selenium      |               |              |                                     |
+| Grafana       |               |              |                                     |
 
 ### Zabbix
 
@@ -44,9 +49,11 @@ The table indicates patterns how to choose/remember IP for certain components
 It's possible to substitute a version number in docker-compose file with:
 
 ```
-grep 170 docker-compose.yaml
-grep z70 docker-compose.yaml
-sed 's|170|180|;s|z70|z80|' docker-compose.yaml
+grep '7.0' docker-compose.yaml
+grep '70' docker-compose.yaml
+sed 's|7.4.5|7.0.21|' docker-compose.yaml
+sed 's|7.4|7.0|' docker-compose.yaml
+sed 's|74|70|' docker-compose.yaml
 ```
 
 
@@ -62,12 +69,31 @@ echo "user ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/011_user-nopasswd
 sudo usermod -a -G docker user
 ```
 
-## Install docker daemon
+## Install docker daemon (Ubuntu 24, Debina 11, Debian 12)
 
 Use
 
 ```
-sudo apt -y install docker-compose
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker.gpg
+
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker.gpg] \
+  https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest \
+  | grep tag_name | cut -d '"' -f 4)
+
+sudo curl -L "https://github.com/docker/compose/releases/download/$VERSION/docker-compose-$(uname -s)-$(uname -m)" \
+  -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 ## Enable official docker monitoring via Zabbix Agent 2 
