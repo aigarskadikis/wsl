@@ -1,0 +1,9 @@
+done:
+  - LDAP container
+  - Table with IP addresses ready
+  - 'git clone' now works with git.zabbix.com
+  - auto create 'zabbix' user in container if not exist
+  - trunk backend tested with git commit
+
+todo:
+  - connect 7.0 GUI to open LDAP
