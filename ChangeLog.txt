@@ -16,6 +16,13 @@ todo:
   - pid monitoring Ubuntu 24
   - install hosts file on windows/linux
   - add plain OS examples
+  - update ODBC 7.0 proxy. test:
+    - MS SQL
+    - Oracle 19c
+    - PostgreSQL 13
+    - PostgreSQL 16
+    - PostgreSQL 17
+    - MySQL 8.0
 
 API todo:
   - change records per page per user
