@@ -1,0 +1,25 @@
+services:
+  pg13ts:
+    image: timescale/timescaledb:2.15.3-pg13
+    container_name: pg13ts
+    environment:
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+      POSTGRES_PASSWORD: 'zabbix'
+      POSTGRES_DB: 'dummy_db'
+
+    volumes:
+      - '${HOME}/postgresql/13:/var/lib/postgresql/data'
+
+    ports:
+      - '7413:5432'
+    networks:
+      podnet:
+        ipv4_address: '10.88.74.13'
+    tty: true
+    restart: unless-stopped
+
+networks:
+  podnet:
+    name: DockerInternalNet
+    external: true
+
