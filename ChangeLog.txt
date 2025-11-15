@@ -8,11 +8,23 @@ done:
 todo:
   - connect 7.0 GUI to open LDAP
   - connect to objects (ldap, proxy) using DNS. edit docker-compose
+  - do not launch ldap container at startup. set it optional
+  - minimize footprint of local Ubuntu 24 proxy. limit to agent checks
+  - upload docker monitoring template to project
+    - set minimal version
+    - ensure no unsupported items
+  - pid monitoring Ubuntu 24
+  - install hosts file on windows/linux
+  - add plain OS examples
 
 API todo:
   - change records per page per user
   - create global API token
-  - install LDAP settings
-  - disable unsupported items
+  - install/overwrite LDAP settings
+  - bulk disable unsupported items
   - create passive proxy
   - check and reimport outdated templates
+  - daily backup non-official templates:
+    - 5.0
+    - 6.0
+    - 7.0
