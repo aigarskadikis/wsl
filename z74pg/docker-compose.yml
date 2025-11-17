@@ -28,7 +28,7 @@ services:
       ZBX_STARTPOLLERSUNREACHABLE: '0'
 
       ZBX_STARTPREPROCESSORS: '1'
-      ZBX_STARTPRO74POLLERS: '1'
+      ZBX_STARTPROXYPOLLERS: '1'
       ZBX_STARTSNMPPOLLERS: '0'
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
@@ -48,7 +48,7 @@ services:
     container_name: z74prx
     environment:
       ZBX_HOSTNAME: 'passive'
-      ZBX_PRO74MODE: '1'
+      ZBX_PROXYMODE: '1'
       TZ: 'Europe/Riga'
       ZBX_CACHESIZE: '256M'
       ZBX_SERVER_HOST: '10.88.2.174'

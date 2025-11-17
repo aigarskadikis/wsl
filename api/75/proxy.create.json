@@ -1,0 +1,11 @@
+{
+  "jsonrpc": "2.0",
+  "method": "proxy.create",
+  "params": {
+    "name": "passive",
+    "operating_mode": "1",
+    "address": "10.88.3.1Xy",
+    "port": "10051"
+  },
+  "id": 1
+}

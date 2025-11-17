@@ -9,6 +9,7 @@ echo "${EXISTING_FRONTENDS}" | grep -v "^$" | while IFS= read -r LINE
 do {
 echo
 echo ${LINE}
+NR=$(echo "${LINE}" | grep -Eo '..$')
 
 if [ "${LINE}" -lt "8063" ]; then
 TOKEN=$(curl --silent \
