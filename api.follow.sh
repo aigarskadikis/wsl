@@ -38,8 +38,9 @@ http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})" | tee /t
 
 echo 'proxy.get' | grep "${STEP}" > /dev/null
 [ "$?" -eq "0" ] && \
-if [ "${LINE}" -lt "8063" ]; then
+if [ "${LINE}" -lt "8065" ]; then
 
+# token in body
 curl --silent \
 --request POST \
 --header 'Content-Type: application/json-rpc' \
@@ -48,7 +49,13 @@ http://127.0.0.1:${LINE}/api_jsonrpc.php
 
 else
 
-echo asdf
+# token in header
+curl --silent \
+--request POST \
+--header 'Content-Type: application/json-rpc' \
+--header 'Authorization: Bearer '$(cat /tmp/.zabbix.api.${NR}) \
+--data "$(jq . $(cat /tmp/path.cat) -c)" \
+http://127.0.0.1:${LINE}/api_jsonrpc.php
 
 fi
 

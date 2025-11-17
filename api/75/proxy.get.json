@@ -1,0 +1,8 @@
+{
+  "jsonrpc": "2.0",
+  "method": "proxy.get",
+  "params": {
+    "output": ["name"]
+  },
+  "id": 1
+}
