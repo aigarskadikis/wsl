@@ -27,7 +27,7 @@ head ChangeLog
 ./configure && \
 make dbschema
 
-# ensure DB username 'zabbix' exists:
+# ensure a dedicated PostgreSQL user 'zabbix' exists:
 docker exec -it pg${PG}ts psql -U postgres -c \
 "DO \$\$
 BEGIN
