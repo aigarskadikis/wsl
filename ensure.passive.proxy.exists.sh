@@ -2,6 +2,7 @@
 
 # see all listening ports
 EXISTING_FRONTENDS=$(ss --tcp --liste --numeric --ipv4 |  grep -Eo '80..' | sort | uniq)
+MAJOR=$(echo "${EXISTING_FRONTENDS}" | grep -Eo '..$')
 
 # obtain session token for each
 echo "${EXISTING_FRONTENDS}" | grep -v "^$" | while IFS= read -r LINE
@@ -66,9 +67,16 @@ PROXY_LIST="$(curl --silent \
         "output": "extend"
     },
     "id": 1
-}' http://127.0.0.1:${LINE}/api_jsonrpc.php)"
+}' http://127.0.0.1:${LINE}/api_jsonrpc.php | jq .result[0].address)"
 
-echo "${PROXY_LIST}"
+echo "${PROXY_LIST}" | grep "10.88.3.1${MAJOR}" || \
+curl --silent \
+--request POST \
+--header 'Content-Type: application/json-rpc' \
+--header 'Authorization: Bearer '${TOKEN} \
+--data '
+{"jsonrpc":"2.0","method":"proxy.create","params":{"name":"passive","operating_mode":"1","address":"10.88.3.1'${NR}'","port":"10051"},"id":1}
+' http://127.0.0.1:${LINE}/api_jsonrpc.php
 
 fi
 
