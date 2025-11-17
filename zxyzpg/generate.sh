@@ -24,7 +24,7 @@ cd -
 
 mkdir -p ../z${MAJOR}pg && \
 cat docker-compose.yml | \
-sed "s|XY|${MAJOR}|g;s|X.Y.Z|${VERSION}|g;s|DBV|${DB}|" | \
+sed "s|Xy|${MAJOR}|g;s|X.Y.Z|${VERSION}|g;s|DBV|${DB}|" | \
 tee ../z${MAJOR}pg/docker-compose.yml
 
 cat update-settings.sh | tee ../z${MAJOR}pg/update-settings.sh

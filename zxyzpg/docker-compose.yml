@@ -1,11 +1,11 @@
 services:
-  zXYpg:
+  zXypg:
     image: zabbix/zabbix-server-pgsql:X.Y.Z-alpine
-    container_name: zXYpg
+    container_name: zXypg
     environment:
       DB_SERVER_HOST: '10.88.74.DBV'
       DB_SERVER_PORT: '5432'
-      POSTGRES_DB: 'zXY'
+      POSTGRES_DB: 'zXy'
       POSTGRES_PASSWORD: 'zabbix'
       POSTGRES_USER: 'zabbix'
       TZ: 'Europe/Riga'
@@ -36,22 +36,22 @@ services:
       ZBX_STARTPINGERS: '0'
 
     ports:
-      - "1XY51:10051"
+      - "1Xy51:10051"
     networks:
       podnet:
-        ipv4_address: 10.88.2.1XY
+        ipv4_address: 10.88.2.1Xy
     tty: true
     restart: unless-stopped
 
-  zXYprx:
+  zXyprx:
     image: zabbix/zabbix-proxy-sqlite3:X.Y.Z-alpine
-    container_name: zXYprx
+    container_name: zXyprx
     environment:
       ZBX_HOSTNAME: 'passive'
       ZBX_PROXYMODE: '1'
       TZ: 'Europe/Riga'
       ZBX_CACHESIZE: '256M'
-      ZBX_SERVER_HOST: '10.88.2.1XY'
+      ZBX_SERVER_HOST: '10.88.2.1Xy'
       ZBX_STARTAGENTPOLLERS: '0'
       ZBX_STARTBROWSERPOLLERS: '0'
       ZBX_STARTDBSYNCERS: '1'
@@ -71,32 +71,32 @@ services:
       ZBX_STATSALLOWEDIP: second.ext
 
     ports:
-      - "2XY51:10051"
+      - "2Xy51:10051"
     networks:
       podnet:
-        ipv4_address: 10.88.3.1XY
+        ipv4_address: 10.88.3.1Xy
     tty: true
     restart: unless-stopped
 
 
-  zXYweb:
+  zXyweb:
     image: zabbix/zabbix-web-nginx-pgsql:X.Y.Z-alpine
-    container_name: zXYweb
+    container_name: zXyweb
     environment:
       DB_SERVER_HOST: '10.88.74.DBV'
       DB_SERVER_PORT: '5432'
-      POSTGRES_DB: 'zXY'
+      POSTGRES_DB: 'zXy'
       POSTGRES_USER: 'zabbix'
       POSTGRES_PASSWORD: 'zabbix'
-      ZBX_SERVER_HOST: '10.88.2.1XY'
+      ZBX_SERVER_HOST: '10.88.2.1Xy'
       ZBX_SERVER_PORT: '10051'
       PHP_TZ: 'Europe/Riga'
 
     ports:
-      - "80XY:8080"
+      - "80Xy:8080"
     networks:
       podnet:
-        ipv4_address: 10.88.1.1XY
+        ipv4_address: 10.88.1.1Xy
     tty: true
     restart: unless-stopped
 

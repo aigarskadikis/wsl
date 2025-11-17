@@ -1,16 +1,16 @@
 services:
   z70pg:
-    image: zabbix/zabbix-server-pgsql:7.0.21-alpine
+    image: zabbix/zabbix-server-pgsql:7.0.20-alpine
     container_name: z70pg
     environment:
-      DB_SERVER_HOST: 10.88.74.16
+      DB_SERVER_HOST: '10.88.74.13'
       DB_SERVER_PORT: '5432'
-      POSTGRES_DB: z70
-      POSTGRES_PASSWORD: zabbix
-      POSTGRES_USER: zabbix
-      TZ: Europe/Riga
-      ZBX_ALLOWUNSUPPORTEDDBVERSIONS: '1'
-      ZBX_CACHESIZE: 256M
+      POSTGRES_DB: 'z70'
+      POSTGRES_PASSWORD: 'zabbix'
+      POSTGRES_USER: 'zabbix'
+      TZ: 'Europe/Riga'
+      ZBX_ALLOWUNSUPPORTED13ERSIONS: '1'
+      ZBX_CACHESIZE: '256M'
       ZBX_STARTAGENTPOLLERS: '0'
       ZBX_STARTALERTERS: '1'
       ZBX_STARTBROWSERPOLLERS: '0'
@@ -44,14 +44,14 @@ services:
     restart: unless-stopped
 
   z70prx:
-    image: zabbix/zabbix-proxy-sqlite3:7.0.21-alpine
+    image: zabbix/zabbix-proxy-sqlite3:7.0.20-alpine
     container_name: z70prx
     environment:
       ZBX_HOSTNAME: 'passive'
       ZBX_PROXYMODE: '1'
-      TZ: Europe/Riga
-      ZBX_CACHESIZE: 256M
-      ZBX_SERVER_HOST: 10.88.2.170
+      TZ: 'Europe/Riga'
+      ZBX_CACHESIZE: '256M'
+      ZBX_SERVER_HOST: '10.88.2.170'
       ZBX_STARTAGENTPOLLERS: '0'
       ZBX_STARTBROWSERPOLLERS: '0'
       ZBX_STARTDBSYNCERS: '1'
@@ -80,10 +80,10 @@ services:
 
 
   z70web:
-    image: zabbix/zabbix-web-nginx-pgsql:7.0.21-alpine
+    image: zabbix/zabbix-web-nginx-pgsql:7.0.20-alpine
     container_name: z70web
     environment:
-      DB_SERVER_HOST: '10.88.74.16'
+      DB_SERVER_HOST: '10.88.74.13'
       DB_SERVER_PORT: '5432'
       POSTGRES_DB: 'z70'
       POSTGRES_USER: 'zabbix'
@@ -99,7 +99,6 @@ services:
         ipv4_address: 10.88.1.170
     tty: true
     restart: unless-stopped
-
 
 networks:
   podnet:
