@@ -27,19 +27,14 @@ VER=$(echo "${MINVER}" | grep -Eo "[0-9]+")
 
 } done
 
+# store session token
 curl --silent \
 --request POST \
 --header 'Content-Type: application/json-rpc' \
 --data "$(jq . /tmp/body.json -c)" \
-http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})"
-
-
-#cat /tmp/body.json
+http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})" | tee /tmp/.zabbix.api.${NR}
 
 } done
-
-
-
 
 } done
 echo
