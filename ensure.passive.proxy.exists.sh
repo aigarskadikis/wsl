@@ -10,7 +10,7 @@ echo
 echo ${LINE}
 
 if [ "${LINE}" -lt "8063" ]; then
-curl --silent \
+TOKEN=$(curl --silent \
 --request POST \
 --header 'Content-Type: application/json-rpc' \
 --data '{
@@ -21,11 +21,28 @@ curl --silent \
   "password": "zabbix"
  },
 "id":1
-}' http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})"
+}' http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})")
+
+# fetch proxy list
+PROXY_LIST="$(curl --silent \
+--request POST \
+--header 'Content-Type: application/json-rpc' \
+--data '{
+    "jsonrpc": "2.0",
+    "method": "proxy.get",
+    "params": {
+        "output": "extend"
+    },
+    "id": 1,
+    "auth": "'${TOKEN}'"
+}' http://127.0.0.1:${LINE}/api_jsonrpc.php)"
+
+echo "${PROXY_LIST}"
+
 else
 
 # starting with 6.4
-curl --silent \
+TOKEN=$(curl --silent \
 --request POST \
 --header 'Content-Type: application/json-rpc' \
 --data '{
@@ -36,9 +53,26 @@ curl --silent \
   "password": "zabbix"
  },
  "id": 1
-}' http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})"
+}' http://127.0.0.1:${LINE}/api_jsonrpc.php | grep -Eo "([0-9a-f]{32,32})")
+
+PROXY_LIST="$(curl --silent \
+--request POST \
+--header 'Content-Type: application/json-rpc' \
+--header 'Authorization: Bearer '${TOKEN} \
+--data '{
+    "jsonrpc": "2.0",
+    "method": "proxy.get",
+    "params": {
+        "output": "extend"
+    },
+    "id": 1
+}' http://127.0.0.1:${LINE}/api_jsonrpc.php)"
+
+echo "${PROXY_LIST}"
 
 fi
+
+
 
 } done
 echo
