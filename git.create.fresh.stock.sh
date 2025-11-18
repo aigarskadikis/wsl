@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# which version of PostgreSQL to use
-PG=$1
-
-# check if first argument is given
-[ -z "${PG}" ] && echo "first argument must be version of PostgreSQL server" && exit 1
-
 # zabbix version to create
-VERSION=$2
+VERSION=$1
 
 [ -z "${VERSION}" ] && echo "second argument must be version of Zabbix" && exit 1
+
+# which version of PostgreSQL to use
+PG=$2
+
+# if second argument is empty the set PostgreSQL version 17
+[ -z "${PG}" ] && PG=17
 
 # formulate a desired DB name. for example if version is '7.4.5' then DB name will be 'z74'
 DBNAME=$(echo ${VERSION} | sed 's|\.||g' | grep -Eo '^..' | sed 's|^|z|')
@@ -52,4 +52,8 @@ docker exec -it pg${PG}ts psql -U postgres -c "CREATE DATABASE $DBNAME OWNER zab
 cat ~/zabbix/database/postgresql/schema.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
 cat ~/zabbix/database/postgresql/images.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
 cat ~/zabbix/database/postgresql/data.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
+
+# patches/productivity
+cd -
+cat update.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
 

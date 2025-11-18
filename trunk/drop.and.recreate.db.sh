@@ -11,8 +11,8 @@ END
 \$\$;"
 
 # drop database
-docker exec -it pg17ts psql -U postgres -c "DROP DATABASE IF EXISTS trunk;"
+docker exec -it pg17ts psql -U postgres -c "DROP DATABASE IF EXISTS z99;"
 
 # create database and assign to user 'zabbix'
-docker exec -it pg17ts psql -U postgres -c "CREATE DATABASE trunk OWNER zabbix;"
+docker exec -it pg17ts psql -U postgres -c "CREATE DATABASE z99 OWNER zabbix;"
 
