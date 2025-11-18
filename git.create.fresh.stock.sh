@@ -14,6 +14,12 @@ VERSION=$2
 # formulate a desired DB name. for example if version is '7.4.5' then DB name will be 'z74'
 DBNAME=$(echo ${VERSION} | sed 's|\.||g' | grep -Eo '^..' | sed 's|^|z|')
 
+# check if DB is running
+ALL_CONTAINERS_STATE="$(docker ps --all --no-trunc --format {{.Names}}.{{.State}})"
+
+echo "${ALL_CONTAINERS_STATE}" | grep "pg${PG}ts.running" || \
+docker-compose --project-directory ./pg${PG} up --detach || exit 1
+
 # switch to version
 cd ~/zabbix && \
 git fetch --tags && \
