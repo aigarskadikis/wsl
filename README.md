@@ -3,6 +3,34 @@ Windows Subsystem for Linux - Run optimal set of containers via Ubuntu via docke
 
 All upcoming examples will use official Docker (from Ubuntu 24).
 
+## hosts file
+
+```
+127.0.0.1 z24.ubuntu.wsl
+127.0.0.1 z30.ubuntu.wsl
+127.0.0.1 z32.ubuntu.wsl
+127.0.0.1 z34.ubuntu.wsl
+127.0.0.1 z40.ubuntu.wsl
+127.0.0.1 z42.ubuntu.wsl
+127.0.0.1 z44.ubuntu.wsl
+127.0.0.1 z50.ubuntu.wsl
+127.0.0.1 z52.ubuntu.wsl
+127.0.0.1 z54.ubuntu.wsl
+127.0.0.1 z60.ubuntu.wsl
+127.0.0.1 z62.ubuntu.wsl
+127.0.0.1 z64.ubuntu.wsl
+127.0.0.1 z70.ubuntu.wsl
+127.0.0.1 z72.ubuntu.wsl
+127.0.0.1 z74.ubuntu.wsl
+127.0.0.1 z80.ubuntu.wsl
+127.0.0.1 z82.ubuntu.wsl
+127.0.0.1 z84.ubuntu.wsl
+127.0.0.1 z90.ubuntu.wsl
+127.0.0.1 z92.ubuntu.wsl
+127.0.0.1 z94.ubuntu.wsl
+127.0.0.1 z99.ubuntu.wsl
+```
+
 ## IP Address map
 
 The table indicates patterns how to choose/remember IP for certain components
