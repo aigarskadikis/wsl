@@ -30,5 +30,5 @@ tee ../z${MAJOR}pg/docker-compose.yml
 cat update-settings.sh | tee ../z${MAJOR}pg/update-settings.sh
 chmod +x ../z${MAJOR}pg/update-settings.sh
 
-cd ..
-./git.create.fresh.stock.sh ${DB} ${VERSION}
+#cd ..
+#./git.create.fresh.stock.sh ${DB} ${VERSION}
