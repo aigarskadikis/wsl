@@ -53,7 +53,24 @@ cat ~/zabbix/database/postgresql/schema.sql | docker exec -i pg${PG}ts psql -U z
 cat ~/zabbix/database/postgresql/images.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
 cat ~/zabbix/database/postgresql/data.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
 
+DBVERSION=$(echo "
+SELECT mandatory FROM dbversion;
+" | \
+docker exec -i pg${PG}ts psql --tuples-only --no-align -U zabbix -d $DBNAME
+)
+
 # patches/productivity
 cd -
-cat update.sql | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
+
+find patches -maxdepth 1 -type f -name '*.sql' | while IFS= read -r SQLCOMMAND
+do {
+FILE=$(echo $SQLCOMMAND | grep -Eo '[0-9]+')
+echo "${SQLCOMMAND}" | grep "${DBVERSION}"
+if [ "$?" -eq "0" ]; then
+cat "${SQLCOMMAND}"
+cat "${SQLCOMMAND}" | docker exec -i pg${PG}ts psql -U zabbix -d $DBNAME
+
+fi
+
+} done
 
