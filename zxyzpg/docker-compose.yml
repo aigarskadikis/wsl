@@ -33,7 +33,7 @@ services:
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
-      ZBX_STARTPINGERS: '0'
+      ZBX_STARTPINGERS: '1'
 
     ports:
       - "1Xy51:10051"
