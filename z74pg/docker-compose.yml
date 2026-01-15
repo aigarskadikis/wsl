@@ -1,6 +1,6 @@
 services:
   z74pg:
-    image: zabbix/zabbix-server-pgsql:7.4.5-alpine
+    image: zabbix/zabbix-server-pgsql:7.4.6-alpine
     container_name: z74pg
     environment:
       DB_SERVER_HOST: '10.88.74.17'
@@ -33,7 +33,7 @@ services:
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
-      ZBX_STARTPINGERS: '0'
+      ZBX_STARTPINGERS: '1'
 
     ports:
       - "17451:10051"
@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
 
   z74prx:
-    image: zabbix/zabbix-proxy-sqlite3:7.4.5-alpine
+    image: zabbix/zabbix-proxy-sqlite3:7.4.6-alpine
     container_name: z74prx
     environment:
       ZBX_HOSTNAME: 'passive'
@@ -80,7 +80,7 @@ services:
 
 
   z74web:
-    image: zabbix/zabbix-web-nginx-pgsql:7.4.5-alpine
+    image: zabbix/zabbix-web-nginx-pgsql:7.4.6-alpine
     container_name: z74web
     environment:
       DB_SERVER_HOST: '10.88.74.17'
@@ -91,6 +91,9 @@ services:
       ZBX_SERVER_HOST: '10.88.2.174'
       ZBX_SERVER_PORT: '10051'
       PHP_TZ: 'Europe/Riga'
+
+    volumes:
+      - '${HOME}/z74modules:/usr/share/zabbix/modules'
 
     ports:
       - "8074:8080"

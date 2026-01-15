@@ -161,6 +161,9 @@ services:
       ZBX_SERVER_PORT: '10051'
       PHP_TZ: 'Europe/Riga'
 
+    volumes:
+      - '${HOME}/z70modules:/usr/share/zabbix/modules'
+
     ports:
       - "8070:8080"
     networks:

@@ -1,6 +1,6 @@
 services:
   z72pg:
-    image: zabbix/zabbix-server-pgsql:7.2.14-alpine
+    image: zabbix/zabbix-server-pgsql:7.2.15-alpine
     container_name: z72pg
     environment:
       DB_SERVER_HOST: '10.88.74.17'
@@ -33,7 +33,7 @@ services:
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
-      ZBX_STARTPINGERS: '0'
+      ZBX_STARTPINGERS: '1'
 
     ports:
       - "17251:10051"
@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
 
   z72prx:
-    image: zabbix/zabbix-proxy-sqlite3:7.2.14-alpine
+    image: zabbix/zabbix-proxy-sqlite3:7.2.15-alpine
     container_name: z72prx
     environment:
       ZBX_HOSTNAME: 'passive'
@@ -62,9 +62,9 @@ services:
       ZBX_STARTHTTPAGENTPOLLERS: '0'
       ZBX_STARTHTTPPOLLERS: '0'
       ZBX_STARTPINGERS: '0'
-      ZBX_STARTPOLLERS: '0'
+      ZBX_STARTPOLLERS: '1'
       ZBX_STARTJAVAPOLLERS: '0'
-      ZBX_STARTPOLLERSUNREACHABLE: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '1'
       ZBX_STARTPREPROCESSORS: '1'
       ZBX_STARTSNMPPOLLERS: '0'
       ZBX_STARTTRAPPERS: '2'
@@ -80,7 +80,7 @@ services:
 
 
   z72web:
-    image: zabbix/zabbix-web-nginx-pgsql:7.2.14-alpine
+    image: zabbix/zabbix-web-nginx-pgsql:7.2.15-alpine
     container_name: z72web
     environment:
       DB_SERVER_HOST: '10.88.74.17'
@@ -91,6 +91,9 @@ services:
       ZBX_SERVER_HOST: '10.88.2.172'
       ZBX_SERVER_PORT: '10051'
       PHP_TZ: 'Europe/Riga'
+
+    volumes:
+      - '${HOME}/z72modules:/usr/share/zabbix/modules'
 
     ports:
       - "8072:8080"

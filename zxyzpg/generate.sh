@@ -46,9 +46,12 @@ cat docker-compose.yml | \
 sed "s|Xy|${MAJOR}|g;s|X.Y.Z|${VERSION}|g;s|DBV|${DB}|" | \
 tee ../z${MAJOR}pg/docker-compose.yml
 
+
 fi
 
-cat update-settings.sh | tee ../z${MAJOR}pg/update-settings.sh
+cat update-settings.sh | \
+sed "s|Xy|${MAJOR}|g;s|X.Y.Z|${VERSION}|g;s|DBV|${DB}|" | \
+tee ../z${MAJOR}pg/update-settings.sh
 chmod +x ../z${MAJOR}pg/update-settings.sh
 
 cat stop.sh | tee ../z${MAJOR}pg/stop.sh
