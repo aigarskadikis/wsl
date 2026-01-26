@@ -3,6 +3,7 @@ services:
     image: zabbix/zabbix-server-pgsql:X.Y.Z-alpine
     container_name: zXypg
     environment:
+      ZBX_DEBUGLEVEL: '5'
       DB_SERVER_HOST: '10.88.74.DBV'
       DB_SERVER_PORT: '5432'
       POSTGRES_DB: 'zXy'
@@ -47,6 +48,7 @@ services:
     image: zabbix/zabbix-proxy-sqlite3:X.Y.Z-alpine
     container_name: zXyprx
     environment:
+      ZBX_DEBUGLEVEL: '3'
       ZBX_HOSTNAME: 'passive'
       ZBX_PROXYMODE: '1'
       TZ: 'Europe/Riga'
