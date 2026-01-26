@@ -1,8 +1,11 @@
 services:
+
+# 'zabbix-server', the backend
   z70pg:
     image: zabbix/zabbix-server-pgsql:7.0.22-alpine
     container_name: z70pg
     environment:
+      ZBX_DEBUGLEVEL: '4'
       DB_SERVER_HOST: '10.88.74.17'
       DB_SERVER_PORT: '5432'
       POSTGRES_DB: 'z70'
@@ -11,7 +14,7 @@ services:
       TZ: 'Europe/Riga'
       ZBX_ALLOWUNSUPPORTED17ERSIONS: '1'
       ZBX_CACHESIZE: '256M'
-      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTAGENTPOLLERS: '1'
       ZBX_STARTALERTERS: '1'
       ZBX_STARTBROWSERPOLLERS: '0'
       ZBX_STARTDBSYNCERS: '1'
@@ -19,8 +22,8 @@ services:
       ZBX_STARTODBCPOLLERS: '0'
       ZBX_STARTIPMIPOLLERS: '0'
       ZBX_STARTHISTORYPOLLERS: '1'
-      ZBX_STARTHTTPAGENTPOLLERS: '0'
-      ZBX_STARTHTTPPOLLERS: '0'
+      ZBX_STARTHTTPAGENTPOLLERS: '1'
+      ZBX_STARTHTTPPOLLERS: '1'
       ZBX_STARTLLDPROCESSORS: '1'
 
       ZBX_STARTPOLLERS: '1'
@@ -43,11 +46,13 @@ services:
     tty: true
     restart: unless-stopped
 
-  z70prx:
+# passive Zabbix proxy
+  z70passive:
     image: zabbix/zabbix-proxy-sqlite3:7.0.22-alpine
-    container_name: z70prx
+    container_name: z70passive
     environment:
-      ZBX_HOSTNAME: 'passive'
+      ZBX_DEBUGLEVEL: '3'
+      ZBX_HOSTNAME: 'z70passive'
       ZBX_PROXYMODE: '1'
       TZ: 'Europe/Riga'
       ZBX_CACHESIZE: '256M'
@@ -55,30 +60,67 @@ services:
       ZBX_STARTAGENTPOLLERS: '0'
       ZBX_STARTBROWSERPOLLERS: '0'
       ZBX_STARTDBSYNCERS: '1'
-      ZBX_STARTDISCOVERERS: '0'
+      ZBX_STARTDISCOVERERS: '1'
       ZBX_STARTODBCPOLLERS: '0'
       ZBX_STARTIPMIPOLLERS: '0'
-      ZBX_STARTHISTORYPOLLERS: '0'
-      ZBX_STARTHTTPAGENTPOLLERS: '0'
-      ZBX_STARTHTTPPOLLERS: '0'
-      ZBX_STARTPINGERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '1'
+      ZBX_STARTHTTPAGENTPOLLERS: '1'
+      ZBX_STARTHTTPPOLLERS: '1'
+      ZBX_STARTPINGERS: '1'
       ZBX_STARTPOLLERS: '1'
       ZBX_STARTJAVAPOLLERS: '0'
       ZBX_STARTPOLLERSUNREACHABLE: '1'
       ZBX_STARTPREPROCESSORS: '1'
-      ZBX_STARTSNMPPOLLERS: '0'
+      ZBX_STARTSNMPPOLLERS: '1'
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
     ports:
-      - "27051:10051"
+      - "37051:10051"
     networks:
       podnet:
         ipv4_address: 10.88.3.170
     tty: true
     restart: unless-stopped
 
+# active Zabbix proxy
+  z70active:
+    image: zabbix/zabbix-proxy-sqlite3:7.0.22-alpine
+    container_name: z70active
+    environment:
+      ZBX_DEBUGLEVEL: '4'
+      ZBX_HOSTNAME: 'z70active'
+      ZBX_PROXYMODE: '0'
+      TZ: 'Europe/Riga'
+      ZBX_CACHESIZE: '256M'
+      ZBX_SERVER_HOST: '10.88.2.170'
+      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTBROWSERPOLLERS: '0'
+      ZBX_STARTDBSYNCERS: '1'
+      ZBX_STARTDISCOVERERS: '1'
+      ZBX_STARTODBCPOLLERS: '0'
+      ZBX_STARTIPMIPOLLERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '1'
+      ZBX_STARTHTTPAGENTPOLLERS: '1'
+      ZBX_STARTHTTPPOLLERS: '1'
+      ZBX_STARTPINGERS: '1'
+      ZBX_STARTPOLLERS: '1'
+      ZBX_STARTJAVAPOLLERS: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '1'
+      ZBX_STARTPREPROCESSORS: '1'
+      ZBX_STARTSNMPPOLLERS: '1'
+      ZBX_STARTTRAPPERS: '2'
+      ZBX_STATSALLOWEDIP: second.ext
 
+    ports:
+      - "47051:10051"
+    networks:
+      podnet:
+        ipv4_address: 10.88.4.170
+    tty: true
+    restart: unless-stopped
+
+# Zabbix GUI with NGINX
   z70web:
     image: zabbix/zabbix-web-nginx-pgsql:7.0.22-alpine
     container_name: z70web
