@@ -1,8 +1,11 @@
 services:
+
+# 'zabbix-server', the backend
   z99pg:
     image: zabbix/zabbix-server-pgsql:trunk-alpine
     container_name: z99pg
     environment:
+      ZBX_DEBUGLEVEL: '3'
       DB_SERVER_HOST: '10.88.74.17'
       DB_SERVER_PORT: '5432'
       POSTGRES_DB: 'z99'
@@ -11,7 +14,7 @@ services:
       TZ: 'Europe/Riga'
       ZBX_ALLOWUNSUPPORTED17ERSIONS: '1'
       ZBX_CACHESIZE: '256M'
-      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTAGENTPOLLERS: '1'
       ZBX_STARTALERTERS: '1'
       ZBX_STARTBROWSERPOLLERS: '0'
       ZBX_STARTDBSYNCERS: '1'
@@ -19,8 +22,8 @@ services:
       ZBX_STARTODBCPOLLERS: '0'
       ZBX_STARTIPMIPOLLERS: '0'
       ZBX_STARTHISTORYPOLLERS: '1'
-      ZBX_STARTHTTPAGENTPOLLERS: '0'
-      ZBX_STARTHTTPPOLLERS: '0'
+      ZBX_STARTHTTPAGENTPOLLERS: '1'
+      ZBX_STARTHTTPPOLLERS: '1'
       ZBX_STARTLLDPROCESSORS: '1'
 
       ZBX_STARTPOLLERS: '1'
@@ -33,7 +36,7 @@ services:
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
-      ZBX_STARTPINGERS: '0'
+      ZBX_STARTPINGERS: '1'
 
     ports:
       - "19951:10051"
@@ -43,11 +46,13 @@ services:
     tty: true
     restart: unless-stopped
 
-  z99prx:
+# passive Zabbix proxy
+  z99passive:
     image: zabbix/zabbix-proxy-sqlite3:trunk-alpine
-    container_name: z99prx
+    container_name: z99passive
     environment:
-      ZBX_HOSTNAME: 'passive'
+      ZBX_DEBUGLEVEL: '3'
+      ZBX_HOSTNAME: 'z99passive'
       ZBX_PROXYMODE: '1'
       TZ: 'Europe/Riga'
       ZBX_CACHESIZE: '256M'
@@ -55,34 +60,72 @@ services:
       ZBX_STARTAGENTPOLLERS: '0'
       ZBX_STARTBROWSERPOLLERS: '0'
       ZBX_STARTDBSYNCERS: '1'
-      ZBX_STARTDISCOVERERS: '0'
+      ZBX_STARTDISCOVERERS: '1'
       ZBX_STARTODBCPOLLERS: '0'
       ZBX_STARTIPMIPOLLERS: '0'
-      ZBX_STARTHISTORYPOLLERS: '0'
-      ZBX_STARTHTTPAGENTPOLLERS: '0'
-      ZBX_STARTHTTPPOLLERS: '0'
-      ZBX_STARTPINGERS: '0'
-      ZBX_STARTPOLLERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '1'
+      ZBX_STARTHTTPAGENTPOLLERS: '1'
+      ZBX_STARTHTTPPOLLERS: '1'
+      ZBX_STARTPINGERS: '1'
+      ZBX_STARTPOLLERS: '1'
       ZBX_STARTJAVAPOLLERS: '0'
-      ZBX_STARTPOLLERSUNREACHABLE: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '1'
       ZBX_STARTPREPROCESSORS: '1'
-      ZBX_STARTSNMPPOLLERS: '0'
+      ZBX_STARTSNMPPOLLERS: '1'
       ZBX_STARTTRAPPERS: '2'
       ZBX_STATSALLOWEDIP: second.ext
 
     ports:
-      - "29951:10051"
+      - "39951:10051"
     networks:
       podnet:
         ipv4_address: 10.88.3.199
     tty: true
     restart: unless-stopped
 
+# active Zabbix proxy
+  z99active:
+    image: zabbix/zabbix-proxy-sqlite3:trunk-alpine
+    container_name: z99active
+    environment:
+      ZBX_DEBUGLEVEL: '3'
+      ZBX_HOSTNAME: 'z99active'
+      ZBX_PROXYMODE: '0'
+      TZ: 'Europe/Riga'
+      ZBX_CACHESIZE: '256M'
+      ZBX_SERVER_HOST: '10.88.2.199'
+      ZBX_STARTAGENTPOLLERS: '0'
+      ZBX_STARTBROWSERPOLLERS: '0'
+      ZBX_STARTDBSYNCERS: '1'
+      ZBX_STARTDISCOVERERS: '1'
+      ZBX_STARTODBCPOLLERS: '0'
+      ZBX_STARTIPMIPOLLERS: '0'
+      ZBX_STARTHISTORYPOLLERS: '1'
+      ZBX_STARTHTTPAGENTPOLLERS: '1'
+      ZBX_STARTHTTPPOLLERS: '1'
+      ZBX_STARTPINGERS: '1'
+      ZBX_STARTPOLLERS: '1'
+      ZBX_STARTJAVAPOLLERS: '0'
+      ZBX_STARTPOLLERSUNREACHABLE: '1'
+      ZBX_STARTPREPROCESSORS: '1'
+      ZBX_STARTSNMPPOLLERS: '1'
+      ZBX_STARTTRAPPERS: '2'
+      ZBX_STATSALLOWEDIP: second.ext
 
+    ports:
+      - "49951:10051"
+    networks:
+      podnet:
+        ipv4_address: 10.88.4.199
+    tty: true
+    restart: unless-stopped
+
+# Zabbix GUI with NGINX
   z99web:
     image: zabbix/zabbix-web-nginx-pgsql:trunk-alpine
     container_name: z99web
     environment:
+      DEBUG: 'TRUE'
       DB_SERVER_HOST: '10.88.74.17'
       DB_SERVER_PORT: '5432'
       POSTGRES_DB: 'z99'
@@ -92,8 +135,13 @@ services:
       ZBX_SERVER_PORT: '10051'
       PHP_TZ: 'Europe/Riga'
 
+    volumes:
+      - '${HOME}/z99modules:/usr/share/zabbix/modules'
+      - '${HOME}/Dropbox/docker/volume/nginx:/etc/ssl/nginx'
+
     ports:
       - "8099:8080"
+      - "44399:8443"
     networks:
       podnet:
         ipv4_address: 10.88.1.199

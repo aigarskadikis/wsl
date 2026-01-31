@@ -136,9 +136,11 @@ services:
 
     volumes:
       - '${HOME}/zXymodules:/usr/share/zabbix/modules'
+      - '${HOME}/Dropbox/docker/volume/nginx:/etc/ssl/nginx'
 
     ports:
       - "80Xy:8080"
+      - "443Xy:8443"
     networks:
       podnet:
         ipv4_address: 10.88.1.1Xy
