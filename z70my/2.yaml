@@ -1,6 +1,6 @@
 services:
   z70my:
-    image: zabbix/zabbix-server-mysql:7.0.19-alpine
+    image: zabbix/zabbix-server-mysql:7.0.29-alpine
     container_name: z70my
     environment:
       DB_SERVER_HOST: '10.88.74.17'
@@ -45,7 +45,7 @@ services:
     restart: unless-stopped
 
   z70prx:
-    image: zabbix/zabbix-proxy-sqlite3:7.0.19-alpine
+    image: zabbix/zabbix-proxy-sqlite3:7.0.29-alpine
     container_name: z70prx
     environment:
       ZBX_HOSTNAME: 'passive'
@@ -81,7 +81,7 @@ services:
 
 
   z70web:
-    image: zabbix/zabbix-web-apache-mysql:7.0.19-alpine
+    image: zabbix/zabbix-web-apache-mysql:7.0.29-alpine
     container_name: z70web
     environment:
       DB_SERVER_HOST: '10.88.74.17'
