@@ -1,0 +1,24 @@
+services:
+  my84:
+    image: mysql:8.4.11
+    container_name: my84
+    environment:
+      MYSQL_ROOT_PASSWORD: 'zabbix'
+
+    volumes:
+      - '${HOME}/mysql/84/datadir:/var/lib/mysql'
+      - '${HOME}/mysql/84/conf.d:/etc/mysql/conf.d'
+
+    ports:
+      - '3384:3306'
+    networks:
+      podnet:
+        ipv4_address: '10.88.8.4'
+    tty: true
+    restart: unless-stopped
+
+networks:
+  podnet:
+    name: DockerInternalNet
+    external: true
+

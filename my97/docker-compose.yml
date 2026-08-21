@@ -1,0 +1,24 @@
+services:
+  my97:
+    image: mysql:9.7.2
+    container_name: my97
+    environment:
+      MYSQL_ROOT_PASSWORD: 'zabbix'
+
+    volumes:
+      - '${HOME}/mysql/97/datadir:/var/lib/mysql'
+      - '${HOME}/mysql/97/conf.d:/etc/mysql/conf.d'
+
+    ports:
+      - '3397:3306'
+    networks:
+      podnet:
+        ipv4_address: '10.88.9.7'
+    tty: true
+    restart: unless-stopped
+
+networks:
+  podnet:
+    name: DockerInternalNet
+    external: true
+
