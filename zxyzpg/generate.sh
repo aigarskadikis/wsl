@@ -6,7 +6,7 @@ VERSION=$1
 DB=$2
 
 # set default PostgreSQL version if not specified
-[ -z "${DB}" ] && DB=17
+[ -z "${DB}" ] && DB=18
 
 
 MAJORV=$(echo ${VERSION} | grep -Eo '^...')

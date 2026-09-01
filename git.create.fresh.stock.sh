@@ -9,7 +9,7 @@ VERSION=$1
 PG=$2
 
 # if second argument is empty the set PostgreSQL version 17
-[ -z "${PG}" ] && PG=17
+[ -z "${PG}" ] && PG=18
 
 # formulate a desired DB name. for example if version is '7.4.5' then DB name will be 'z74'
 DBNAME=$(echo ${VERSION} | sed 's|\.||g' | grep -Eo '^..' | sed 's|^|z|')

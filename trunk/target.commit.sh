@@ -25,7 +25,7 @@ make dbschema
 
 
 # ensure service user exists:
-docker exec -it pg17ts psql -U postgres -c \
+docker exec -it pg18ts psql -U postgres -c \
 "DO \$\$
 BEGIN
    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'zabbix') THEN
@@ -35,14 +35,14 @@ END
 \$\$;"
 
 # drop database
-docker exec -it pg17ts psql -U postgres -c "DROP DATABASE IF EXISTS z99;"
+docker exec -it pg18ts psql -U postgres -c "DROP DATABASE IF EXISTS z99;"
 
 # create database and assign to user 'zabbix'
-docker exec -it pg17ts psql -U postgres -c "CREATE DATABASE z99 OWNER zabbix;"
+docker exec -it pg18ts psql -U postgres -c "CREATE DATABASE z99 OWNER zabbix;"
 
-cat ~/zabbix/database/postgresql/schema.sql | docker exec -i pg17ts psql -U zabbix -d z99
-cat ~/zabbix/database/postgresql/images.sql | docker exec -i pg17ts psql -U zabbix -d z99
-cat ~/zabbix/database/postgresql/data.sql | docker exec -i pg17ts psql -U zabbix -d z99
+cat ~/zabbix/database/postgresql/schema.sql | docker exec -i pg18ts psql -U zabbix -d z99
+cat ~/zabbix/database/postgresql/images.sql | docker exec -i pg18ts psql -U zabbix -d z99
+cat ~/zabbix/database/postgresql/data.sql | docker exec -i pg18ts psql -U zabbix -d z99
 
 cd -
-cat ../update.sql | docker exec -i pg17ts psql -U zabbix -d z99
+cat ../update.sql | docker exec -i pg18ts psql -U zabbix -d z99
