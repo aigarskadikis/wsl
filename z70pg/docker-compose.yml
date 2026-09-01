@@ -2,7 +2,7 @@ services:
 
 # 'zabbix-server', the backend
   z70pg:
-    image: zabbix/zabbix-server-pgsql:7.0.25-alpine
+    image: zabbix/zabbix-server-pgsql:7.0.30-alpine
     container_name: z70pg
     environment:
       ZBX_DEBUGLEVEL: '3'
@@ -47,10 +47,9 @@ services:
     tty: true
     restart: unless-stopped
 
-
 # passive Zabbix proxy
   z70passive:
-    image: zabbix/zabbix-proxy-sqlite3:7.0.25-alpine
+    image: zabbix/zabbix-proxy-sqlite3:7.0.30-alpine
     container_name: z70passive
     environment:
       ZBX_DEBUGLEVEL: '3'
@@ -87,7 +86,7 @@ services:
 
 # active Zabbix proxy
   z70active:
-    image: zabbix/zabbix-proxy-sqlite3:7.0.25-alpine
+    image: zabbix/zabbix-proxy-sqlite3:7.0.30-alpine
     container_name: z70active
     environment:
       ZBX_DEBUGLEVEL: '3'
@@ -124,7 +123,7 @@ services:
 
 # Zabbix GUI with NGINX
   z70web:
-    image: zabbix/zabbix-web-nginx-pgsql:7.0.25-alpine
+    image: zabbix/zabbix-web-nginx-pgsql:7.0.30-alpine
     container_name: z70web
     environment:
       DB_SERVER_HOST: '10.88.74.17'

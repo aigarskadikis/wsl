@@ -8,6 +8,8 @@ DB=$2
 # set default PostgreSQL version if not specified
 [ -z "${DB}" ] && DB=17
 
+
+MAJORV=$(echo ${VERSION} | grep -Eo '^...')
 MAJOR=$(echo ${VERSION} | sed 's|\.||g' | grep -Eo '^..')
 
 echo "${VERSION}" | grep master && MAJOR=99
@@ -56,6 +58,13 @@ chmod +x ../z${MAJOR}pg/update-settings.sh
 
 cat stop.sh | tee ../z${MAJOR}pg/stop.sh
 chmod +x ../z${MAJOR}pg/stop.sh
+
+cat delete_missing.php | tee ../z${MAJOR}pg/delete_missing.php
+
+cat refresh_stock.sh | \
+sed "s|X.y|${MAJORV}|g" | \
+tee ../z${MAJOR}pg/refresh_stock.sh
+chmod +x ../z${MAJOR}pg/refresh_stock.sh
 
 #cd ..
 #./git.create.fresh.stock.sh ${DB} ${VERSION}

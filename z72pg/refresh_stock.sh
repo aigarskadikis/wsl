@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# exit on any failure
+set -e
+
+# print commands
+set -o xtrace
+
+# read current directory to automatically understand where is php file
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# remove old directory
+rm -rf /tmp/zabbix-release-7.2
+
+# make fresh directory
+mkdir -p /tmp/zabbix-release-7.2
+
+# generate static session token by using menu "Users" => "API tokens"
+SID=$(cat ~/.zabbix-7.2-auth)
+
+# frontend endpoint
+JSONRPC=$(cat ~/.zabbix-7.2-url)/api_jsonrpc.php
+
+# download latest 7.2 branch from official repository of vendor
+curl --insecure \
+--location \
+--output "/tmp/zabbix-release-7.2/7.2.zip" \
+"https://git.zabbix.com/rest/api/latest/projects/ZBX/repos/zabbix/archive?at=refs%2Fheads%2Frelease%2F7.2&format=zip"
+
+# unzip
+cd "/tmp/zabbix-release-7.2"
+unzip "7.2.zip"
+rm -rf "/tmp/zabbix-release-7.2/7.2.zip"
+
+# do not print detailed commands
+set +o xtrace
+
+# start template import
+find /tmp/zabbix-release-7.2/templates -type f -name '*.yaml' | \
+while IFS= read -r TEMPLATE
+do {
+php "$SCRIPT_DIR/delete_missing.php" "$SID" "$JSONRPC" "$TEMPLATE" | \
+jq .result | \
+grep "true" > /dev/null && echo "OK $TEMPLATE"
+# if 'true' not received the print the template name
+[[ $? -ne 0 ]] && echo "failed $TEMPLATE"
+} done
+
+# print commands
+set -o xtrace
+
+# remove working directory
+rm -rf "/tmp/zabbix-release-7.2"
+
