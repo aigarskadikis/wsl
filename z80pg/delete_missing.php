@@ -1,6 +1,6 @@
 <?php
 // usage:
-// php max_perf.php 2b7ac4b98d49d4c3802dbce439180be2 http://158.101.218.248:160/api_jsonrpc.php /root/zabbix-source/templates/db/mssql_odbc/template_db_mssql_odbc.yaml
+// php delete_missing.php 111bb07fb8925762cf65d198155a77d9fa819afaee5a13efceb4aba9b54e7e66 http://z80.ubuntu.wsl:8080/api_jsonrpc.php /root/zabbix-source/templates/db/mssql_odbc/template_db_mssql_odbc.yaml
 
 // program expects to receive 3 arguments. all are mandatory
 [, $auth, $api_url, $path] = $argv + array_fill(0, 4, '');
