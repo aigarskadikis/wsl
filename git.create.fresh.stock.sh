@@ -8,7 +8,7 @@ VERSION=$1
 # which version of PostgreSQL to use
 PG=$2
 
-# if second argument is empty the set PostgreSQL version 17
+# if second argument is empty the set PostgreSQL version 18
 [ -z "${PG}" ] && PG=18
 
 # formulate a desired DB name. for example if version is '7.4.5' then DB name will be 'z74'
